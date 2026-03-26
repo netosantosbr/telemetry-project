@@ -1,0 +1,32 @@
+server:
+  port: 8081 # Foge da porta 8080 padrão para não bater de frente com o Keycloak
+
+spring:
+  application:
+    name: telemetry-ingestion-api # OBRIGATÓRIO: É esse nome que vai aparecer lá no mapa visual do Zipkin
+
+  # CONFIGURAÇÃO DO PRODUCER DO KAFKA
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      # Como a chave da mensagem será tratada (String normal)
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # Como o corpo da mensagem será tratado (Converte nosso objeto Java pra JSON automaticamente)
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        # Pulo do gato do Spring: Ele injeta o nome da classe Java no cabeçalho do Kafka. 
+        # Isso facilita muito a vida do Worker na hora de ler a mensagem do outro lado.
+        spring.json.add.type.headers: true 
+
+# CONFIGURAÇÃO DA OBSERVABILIDADE (Micrometer + Zipkin)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, metrics # Abre as portas para o motor de métricas ler os dados
+  tracing:
+    sampling:
+      probability: 1.0 # Em laboratório, queremos capturar 100% (1.0) das requisições. Em prod, seria 0.1 (10%).
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans # O endereço do nosso container Zipkin no Docker
