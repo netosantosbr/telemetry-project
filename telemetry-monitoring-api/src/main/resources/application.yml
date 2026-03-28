@@ -16,6 +16,8 @@ spring:
         # Pulo do gato: O Spring bloqueia classes desconhecidas por segurança.
         # O asterisco diz: "Confie no JSON que tá chegando, pode converter".
         spring.json.trusted.packages: "*"
+    topic:
+      telemetry: telemetry-ingestion-topic
 
 # Configurações de Observabilidade (Idênticas ao Producer)
 management:
