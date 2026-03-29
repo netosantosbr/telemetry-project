@@ -4,6 +4,14 @@ server:
 spring:
   application:
     name: telemetry-monitoring-api
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: telemetry_db
+      username: admin
+      password: adminpassword
+      authentication-database: admin
 
   kafka:
     consumer:
