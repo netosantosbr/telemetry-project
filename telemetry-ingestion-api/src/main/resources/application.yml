@@ -5,6 +5,12 @@ spring:
   application:
     name: telemetry-ingestion-api # OBRIGATÓRIO: É esse nome que vai aparecer lá no mapa visual do Zipkin
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/telemetry-realm
+
   # CONFIGURAÇÃO DO PRODUCER DO KAFKA
   kafka:
     bootstrap-servers: localhost:9092
